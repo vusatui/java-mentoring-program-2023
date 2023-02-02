@@ -1,4 +1,4 @@
-package com.vusatyi.jmt.bank.api;
+package com.vusatui.jmt.bank.api;
 
 import com.vusatui.jmp.dto.BankCardDTO;
 import com.vusatui.jmp.dto.BankCardType;

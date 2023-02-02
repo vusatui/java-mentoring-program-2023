@@ -15,7 +15,10 @@ public class ServiceImpl implements Service {
 
     @Override
     public void subscribe(BankCardDTO bankCard) {
-        // Do smth
+        var userDTOFromBankCard = bankCard.getUser();
+        var filteredUser = userDTOS.stream().filter(
+                userDTO -> userDTO.equals(userDTOFromBankCard)).findFirst();
+        if (filteredUser.isEmpty()) userDTOS.add(userDTOFromBankCard);
     }
 
     @Override
