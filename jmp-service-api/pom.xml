@@ -11,6 +11,14 @@
 
     <groupId>com.vusatui.jmp.service</groupId>
     <artifactId>api</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>com.vusatui.jmp</groupId>
+            <artifactId>dto</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
