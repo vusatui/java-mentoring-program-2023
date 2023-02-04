@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import com.vusatui.jmp.dto.BankCardDTO;
 import com.vusatui.jmp.dto.SubscriptionDTO;
@@ -16,6 +17,8 @@ public interface Service {
     void subscribe(BankCardDTO bankCard);
 
     Optional<SubscriptionDTO> getSubscriptionByBankCardNumber(String number);
+
+    List<SubscriptionDTO> getAllSubscriptionsByCondition(Predicate<SubscriptionDTO> predicate);
 
     List<UserDTO> getAllUsers();
 

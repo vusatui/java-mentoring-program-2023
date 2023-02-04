@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.vusatui.jmp.dto.BankCardDTO;
@@ -18,12 +19,18 @@ public class ServiceImpl implements Service {
 
     @Override
     public void subscribe(BankCardDTO bankCard) {
-        subscriptions.computeIfAbsent(bankCard.getUser(), userDTO -> new SubscriptionDTO(bankCard.getNumber(), LocalDate.now()));
+        if (Service.isPayableUser(bankCard.getUser()))
+            subscriptions.computeIfAbsent(bankCard.getUser(), userDTO -> new SubscriptionDTO(bankCard.getNumber(), LocalDate.now()));
     }
 
     @Override
     public Optional<SubscriptionDTO> getSubscriptionByBankCardNumber(String number) {
         return subscriptions.values().stream().filter(subscriptionDTO -> subscriptionDTO.getBankcard().equals(number)).findFirst();
+    }
+
+    @Override
+    public List<SubscriptionDTO> getAllSubscriptionsByCondition(Predicate<SubscriptionDTO> predicate) {
+        return subscriptions.values().stream().filter(predicate).collect(Collectors.toUnmodifiableList());
     }
 
     @Override
