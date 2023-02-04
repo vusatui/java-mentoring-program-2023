@@ -4,14 +4,17 @@ package com.vusatyi.jmp.cloud.bank.impl;
 import static com.vusatui.jmp.dto.BankCardType.CREDIT;
 
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.vusatui.jmp.dto.BankCardDTO;
 import com.vusatui.jmp.dto.BankCardType;
 import com.vusatui.jmp.dto.CreditCardDTO;
 import com.vusatui.jmp.dto.DebitCardDTO;
+import com.vusatui.jmp.dto.SubscriptionDTO;
 import com.vusatui.jmp.dto.UserDTO;
 import com.vusatui.jmt.bank.api.Bank;
+import com.vusatyi.jmp.cloud.bank.exception.CardNotFoundException;
 
 public class BankImpl implements Bank {
 
@@ -27,11 +30,11 @@ public class BankImpl implements Bank {
         return bankCard;
     }
 
-    public BankCardDTO getCardByNumber(String number) throws Exception {
+    public BankCardDTO getCardByNumber(String number) throws CardNotFoundException {
         if (bankCardDTOs.containsKey(number)) {
             return bankCardDTOs.get(number);
         } else {
-            throw new Exception("Card with number '" + number + "' not found");
+            throw new CardNotFoundException("Card with number '" + number + "' not found");
         }
     }
 

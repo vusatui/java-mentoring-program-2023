@@ -1,8 +1,11 @@
 package com.vusatui.jmp.cloud.service.impl;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.vusatui.jmp.dto.BankCardDTO;
 import com.vusatui.jmp.dto.SubscriptionDTO;
@@ -11,23 +14,20 @@ import com.vusatui.jmp.service.api.Service;
 
 public class ServiceImpl implements Service {
 
-    private final List<UserDTO> userDTOS = new ArrayList<>();
+    private final Map<UserDTO, SubscriptionDTO> subscriptions = new HashMap<>();
 
     @Override
     public void subscribe(BankCardDTO bankCard) {
-        var userDTOFromBankCard = bankCard.getUser();
-        var filteredUser = userDTOS.stream().filter(
-                userDTO -> userDTO.equals(userDTOFromBankCard)).findFirst();
-        if (filteredUser.isEmpty()) userDTOS.add(userDTOFromBankCard);
+        subscriptions.computeIfAbsent(bankCard.getUser(), userDTO -> new SubscriptionDTO(bankCard.getNumber(), LocalDate.now()));
     }
 
     @Override
     public Optional<SubscriptionDTO> getSubscriptionByBankCardNumber(String number) {
-        return Optional.empty();
+        return subscriptions.values().stream().filter(subscriptionDTO -> subscriptionDTO.getBankcard().equals(number)).findFirst();
     }
 
     @Override
     public List<UserDTO> getAllUsers() {
-        return userDTOS;
+        return subscriptions.keySet().stream().collect(Collectors.toUnmodifiableList());
     }
 }
