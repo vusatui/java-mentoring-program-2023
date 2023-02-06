@@ -2,6 +2,7 @@ package com.vusatyi.jmp.cloud.bank.impl;
 
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import com.vusatui.jmp.dto.BankCardDTO;
@@ -11,7 +12,7 @@ import com.vusatyi.jmp.cloud.bank.exception.CardNotFoundException;
 
 public class BankImpl implements Bank {
 
-    private final HashMap<String, BankCardDTO> bankCardDTOs = new HashMap<>();
+    private final Map<String, BankCardDTO> bankCardDTOs = new HashMap<>();
 
     @Override
     public BankCardDTO createBankCard(UserDTO user, BankCardConsumer bankCardConsumer) {
