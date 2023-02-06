@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Optional;
 import java.util.ServiceLoader;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.vusatui.jmp.cloud.service.impl.exception.SubscriptionNotFoundException;
@@ -16,6 +17,8 @@ import com.vusatui.jmt.bank.api.Bank;
 import com.vusatui.jmt.bank.api.exception.CardNotFoundException;
 
 public class Application {
+
+    static final Collector<CharSequence, ?, String> listCollector = Collectors.joining("\n", "*** - ", "");
 
     public static void main(String[] args) throws SubscriptionNotFoundException, CardNotFoundException {
         System.out.println("*** Start application ***");
@@ -40,7 +43,7 @@ public class Application {
         System.out.println("*** All subscriptions before now: ***");
         var allSubscriptions = service.getAllSubscriptionsByCondition(subscriptionDTO -> subscriptionDTO.getStartDate()
                 .equals(LocalDate.now())).stream().map(Application::getSubscriptionString)
-                .collect(Collectors.joining("\n", "*** - ", ""));
+                .collect(listCollector);
         System.out.println("*** The list of all subscriptions: %n" + allSubscriptions);
 
         System.out.printf("*** Average users age is: %s years. %n", service.getAverageUsersAge());
@@ -51,7 +54,7 @@ public class Application {
         var subscription = service.getSubscriptionByBankCardNumber(cardNumber).orElseThrow(SubscriptionNotFoundException::new);
         System.out.printf("*** Subscription by card number \"%s\" was started at %s %n", cardNumber, subscription.getStartDate());
 
-        var allUsers = service.getAllUsers().stream().map(Application::getUserString).collect(Collectors.joining("\n", "*** - ", ""));
+        var allUsers = service.getAllUsers().stream().map(Application::getUserString).collect(listCollector);
         System.out.println("*** The list of all subscribed users: \n" + allUsers);
     }
 
