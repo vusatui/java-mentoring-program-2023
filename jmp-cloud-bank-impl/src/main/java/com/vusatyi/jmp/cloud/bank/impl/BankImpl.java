@@ -8,7 +8,7 @@ import java.util.UUID;
 import com.vusatui.jmp.dto.BankCardDTO;
 import com.vusatui.jmp.dto.UserDTO;
 import com.vusatui.jmt.bank.api.Bank;
-import com.vusatyi.jmp.cloud.bank.exception.CardNotFoundException;
+import com.vusatui.jmt.bank.api.exception.CardNotFoundException;
 
 public class BankImpl implements Bank {
 

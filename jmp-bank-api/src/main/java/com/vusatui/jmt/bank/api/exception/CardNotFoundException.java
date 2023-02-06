@@ -1,4 +1,4 @@
-package com.vusatyi.jmp.cloud.bank.exception;
+package com.vusatui.jmt.bank.api.exception;
 
 public class CardNotFoundException extends Exception {
 

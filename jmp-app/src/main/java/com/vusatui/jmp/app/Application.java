@@ -13,23 +13,20 @@ import com.vusatui.jmp.dto.SubscriptionDTO;
 import com.vusatui.jmp.dto.UserDTO;
 import com.vusatui.jmp.service.api.Service;
 import com.vusatui.jmt.bank.api.Bank;
+import com.vusatui.jmt.bank.api.exception.CardNotFoundException;
 
 public class Application {
 
-    public static void main(String[] args) throws SubscriptionNotFoundException {
+    public static void main(String[] args) throws SubscriptionNotFoundException, CardNotFoundException {
         System.out.println("*** Start application ***");
 
         Optional<Bank> optionalBank = ServiceLoader.load(Bank.class).findFirst();
         Optional<Service> optionalService = ServiceLoader.load(Service.class).findFirst();
 
-        if (!optionalBank.isPresent() && !optionalService.isPresent()) {
-            return;
-        }
+        Bank bank = optionalBank.orElseThrow();
+        Service service = optionalService.orElseThrow();
 
         System.out.println("*** All required services was loaded ***");
-
-        Bank bank = optionalBank.get();
-        Service service = optionalService.get();
 
         System.out.println("*** Creating a user ***");
         var user1 = new UserDTO("Foo", "Bar", LocalDate.now().minus(Period.of(18, 0, 0)));
@@ -41,15 +38,18 @@ public class Application {
         service.subscribe(bankCardDTO);
 
         System.out.println("*** All subscriptions before now: ***");
-        service.getAllSubscriptionsByCondition(subscriptionDTO -> subscriptionDTO.getStartDate().equals(LocalDate.now()))
-                .forEach(subscriptionDTO -> System.out.println(getSubscriptionString(subscriptionDTO)));
-        System.out.println("***");
+        var allSubscriptions = service.getAllSubscriptionsByCondition(subscriptionDTO -> subscriptionDTO.getStartDate()
+                .equals(LocalDate.now())).stream().map(Application::getSubscriptionString)
+                .collect(Collectors.joining("\n", "*** - ", ""));
+        System.out.println("*** The list of all subscriptions: %n" + allSubscriptions);
 
-        System.out.printf("*** Average users age is: %s years.", service.getAverageUsersAge());
+        System.out.printf("*** Average users age is: %s years. %n", service.getAverageUsersAge());
 
         var cardNumber = bankCardDTO.getNumber();
+        System.out.printf("*** The owner of card %s: %s %n", cardNumber, getUserString(bank.getCardByNumber(cardNumber).getUser()));
+
         var subscription = service.getSubscriptionByBankCardNumber(cardNumber).orElseThrow(SubscriptionNotFoundException::new);
-        System.out.printf("*** Subscription by card number \"%s\" was started at %s", cardNumber, subscription.getStartDate());
+        System.out.printf("*** Subscription by card number \"%s\" was started at %s %n", cardNumber, subscription.getStartDate());
 
         var allUsers = service.getAllUsers().stream().map(Application::getUserString).collect(Collectors.joining("\n", "*** - ", ""));
         System.out.println("*** The list of all subscribed users: \n" + allUsers);
