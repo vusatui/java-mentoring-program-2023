@@ -2,8 +2,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
+
 import com.vusatui.cache.simple.Cache;
 import com.vusatui.cache.simple.CacheImpl;
+import com.vusatui.cache.simple.CacheItem;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
 
@@ -29,4 +33,19 @@ class CacheTest {
         assertEquals("value3", cache.get("key3"));
     }
 
+    @Test
+    void testRemoveListeners() {
+        int cacheLimit = 2;
+        AtomicReference<String> removedItemValue = new AtomicReference<>();
+
+        Cache<String, String> cache = new CacheImpl<>(cacheLimit);
+        cache.put("key1", "value1");
+        cache.put("key2", "value2");
+
+        cache.onRemove(removedItemValue::set);
+
+        cache.put("key2", "value3");
+
+        assertEquals("value2", removedItemValue.get());
+    }
 }

@@ -2,14 +2,19 @@ package com.vusatui.cache.simple;
 
 import static java.util.Objects.isNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class CacheImpl<K, V> implements Cache <K, V> {
 
     private final int maxSize;
 
     private final Map<K, CacheItem<K, V>> map = new HashMap<>();
+
+    private final List<Consumer<V>> removeListeners = new ArrayList<>();
 
     private CacheItem<K, V> first;
 
@@ -38,22 +43,23 @@ public class CacheImpl<K, V> implements Cache <K, V> {
         CacheItem<K, V> item;
         if (map.containsKey(key)) {
             item = map.get(key);
-            item.setValue(value);
             item.hit();
             removeItem(map.get(key));
+            item.setValue(value);
         } else {
             item = new CacheItem<>(key, value);
             if(map.size() == maxSize) {
                 map.remove(first.getKey());
-                first = first.getNext();
-                first.setPrev(null);
+                removeItem(first);
             }
             map.put(key, item);
         }
         reorder(item);
     }
 
-    private void removeItem( CacheItem<K, V> item) {
+    private void removeItem(CacheItem<K, V> item) {
+        removeListeners.forEach(listener -> listener.accept(item.getValue()));
+
         if (!isNull(item.getPrev())) {
             item.getPrev().setNext(item.getNext());
         } else {
@@ -100,5 +106,9 @@ public class CacheImpl<K, V> implements Cache <K, V> {
             first = item;
             last = item;
         }
+    }
+
+    public void onRemove(Consumer<V> listener) {
+        removeListeners.add(listener);
     }
 }
