@@ -3,16 +3,17 @@ package com.vusatui.cache.simple;
 public class CacheItem <K, V> {
 
     private final K key;
-    private final V value;
+    private V value;
 
     private CacheItem<K, V> prev;
     private CacheItem<K, V> next;
+
+    private long hits = 0;
 
     public CacheItem(K key, V value) {
         this.key = key;
         this.value = value;
     }
-
 
     public CacheItem<K, V> getPrev() {
         return prev;
@@ -36,5 +37,17 @@ public class CacheItem <K, V> {
 
     public V getValue() {
         return value;
+    }
+
+    public void setValue(V value) {
+        this.value = value;
+    }
+
+    void hit() {
+        hits++;
+    }
+
+    long getHits() {
+        return hits;
     }
 }
