@@ -11,6 +11,7 @@
     <modules>
         <module>simple</module>
         <module>guava-cache</module>
+        <module>extramile</module>
     </modules>
 
     <properties>
