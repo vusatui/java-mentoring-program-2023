@@ -16,6 +16,8 @@ public class CacheImpl<K, V> implements Cache <K, V> {
 
     private long ttl;
 
+    private long evictionsNumber = 0;
+
     private final Map<K, CacheItem<K, V>> map = new HashMap<>();
 
     private final List<Consumer<V>> removeListeners = new ArrayList<>();
@@ -23,6 +25,8 @@ public class CacheImpl<K, V> implements Cache <K, V> {
     private CacheItem<K, V> first;
 
     private CacheItem<K, V> last;
+
+    private final List<Long> cachePuttingTimes = new ArrayList<>();
 
     public CacheImpl(int maxSize) {
         this.maxSize = maxSize;
@@ -53,23 +57,25 @@ public class CacheImpl<K, V> implements Cache <K, V> {
     }
 
     @Override
-    public void put(K key, V value) {
-        synchronized (map) {
-            CacheItem<K, V> item;
-            if (map.containsKey(key)) {
-                item = map.get(key);
-                item.hit();
-                removeItem(map.get(key));
-                item.setValue(value);
-            } else {
-                item = new CacheItem<>(key, value);
-                if(map.size() == maxSize) {
-                    removeItem(first);
-                }
-                map.put(key, item);
+    public synchronized void put(K key, V value) {
+        long start = System.currentTimeMillis();
+
+        CacheItem<K, V> item;
+        if (map.containsKey(key)) {
+            item = map.get(key);
+            item.hit();
+            removeItem(map.get(key));
+            item.setValue(value);
+        } else {
+            item = new CacheItem<>(key, value);
+            if(map.size() == maxSize) {
+                removeItem(first);
             }
-            reorder(item);
+            map.put(key, item);
         }
+        reorder(item);
+
+        cachePuttingTimes.add(System.currentTimeMillis() - start);
     }
 
     private void removeItem(CacheItem<K, V> item) {
@@ -144,6 +150,7 @@ public class CacheImpl<K, V> implements Cache <K, V> {
     }
 
     private void evict() {
+        evictionsNumber++;
         synchronized (map) {
             if (!isNull(first) && !isNull(last)) {
                 long currTimeStamp = System.currentTimeMillis();
@@ -156,5 +163,16 @@ public class CacheImpl<K, V> implements Cache <K, V> {
                 }
             }
         }
+    }
+
+    public long getEvictionsNumber() {
+        return evictionsNumber;
+    }
+
+    @Override
+    public synchronized long getAveragePuttingTime() {
+        return cachePuttingTimes.isEmpty()
+                ? 0
+                : cachePuttingTimes.stream().reduce(0L, Long::sum) / cachePuttingTimes.size();
     }
 }

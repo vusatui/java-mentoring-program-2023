@@ -9,4 +9,6 @@ public interface Cache <K, V> {
     void put(K key, V value);
 
     void onRemove(Consumer<V> listener);
+
+    long getAveragePuttingTime();
 }
