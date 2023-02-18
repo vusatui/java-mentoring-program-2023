@@ -1,13 +1,10 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
 
 import com.vusatui.cache.simple.Cache;
 import com.vusatui.cache.simple.CacheImpl;
-import com.vusatui.cache.simple.CacheItem;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
 
@@ -47,5 +44,19 @@ class CacheTest {
         cache.put("key2", "value3");
 
         assertEquals("value2", removedItemValue.get());
+    }
+
+    @Test
+    void testTtl() throws InterruptedException {
+        int cacheLimit = 2;
+        long ttl = 3 * 1000;
+        Cache<String, String> cache = new CacheImpl<>(cacheLimit, ttl);
+
+        cache.put("key", "value");
+        assertEquals("value", cache.get("key"));
+
+        Thread.sleep(ttl + 1000);
+
+        assertNull(cache.get("key"));
     }
 }

@@ -1,9 +1,14 @@
 package com.vusatui.cache.simple;
 
+import java.sql.Timestamp;
+
 public class CacheItem <K, V> {
 
     private final K key;
+
     private V value;
+
+    private Timestamp lastHitTimestamp;
 
     private CacheItem<K, V> prev;
     private CacheItem<K, V> next;
@@ -13,6 +18,7 @@ public class CacheItem <K, V> {
     public CacheItem(K key, V value) {
         this.key = key;
         this.value = value;
+        hit();
     }
 
     public CacheItem<K, V> getPrev() {
@@ -45,9 +51,14 @@ public class CacheItem <K, V> {
 
     void hit() {
         hits++;
+        lastHitTimestamp =  new Timestamp(System.currentTimeMillis());
     }
 
     long getHits() {
         return hits;
+    }
+
+    public Timestamp getLastHitTimestamp() {
+        return lastHitTimestamp;
     }
 }

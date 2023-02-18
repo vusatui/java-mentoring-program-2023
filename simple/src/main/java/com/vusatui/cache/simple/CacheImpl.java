@@ -14,6 +14,8 @@ public class CacheImpl<K, V> implements Cache <K, V> {
 
     private final int maxSize;
 
+    private long ttl;
+
     private final Map<K, CacheItem<K, V>> map = new HashMap<>();
 
     private final List<Consumer<V>> removeListeners = new ArrayList<>();
@@ -24,6 +26,12 @@ public class CacheImpl<K, V> implements Cache <K, V> {
 
     public CacheImpl(int maxSize) {
         this.maxSize = maxSize;
+    }
+
+    public CacheImpl(int maxSize, long ttl) {
+        this(maxSize);
+        this.ttl = ttl;
+        startTtl();
     }
 
     private static void log(String message) {
@@ -46,26 +54,29 @@ public class CacheImpl<K, V> implements Cache <K, V> {
 
     @Override
     public void put(K key, V value) {
-        CacheItem<K, V> item;
-        if (map.containsKey(key)) {
-            item = map.get(key);
-            item.hit();
-            removeItem(map.get(key));
-            item.setValue(value);
-        } else {
-            item = new CacheItem<>(key, value);
-            if(map.size() == maxSize) {
-                map.remove(first.getKey());
-                removeItem(first);
+        synchronized (map) {
+            CacheItem<K, V> item;
+            if (map.containsKey(key)) {
+                item = map.get(key);
+                item.hit();
+                removeItem(map.get(key));
+                item.setValue(value);
+            } else {
+                item = new CacheItem<>(key, value);
+                if(map.size() == maxSize) {
+                    removeItem(first);
+                }
+                map.put(key, item);
             }
-            map.put(key, item);
+            reorder(item);
         }
-        reorder(item);
     }
 
     private void removeItem(CacheItem<K, V> item) {
         removeListeners.forEach(listener -> listener.accept(item.getValue()));
         log(String.format(REMOVE_MESSAGE_TEMPLATE, item.getKey()));
+
+        map.remove(first.getKey());
 
         if (!isNull(item.getPrev())) {
             item.getPrev().setNext(item.getNext());
@@ -117,5 +128,33 @@ public class CacheImpl<K, V> implements Cache <K, V> {
 
     public void onRemove(Consumer<V> listener) {
         removeListeners.add(listener);
+    }
+
+    private void startTtl() {
+        new Thread(() -> {
+            while (true) {
+                try {
+                    evict();
+                    Thread.sleep(ttl);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }).start();
+    }
+
+    private void evict() {
+        synchronized (map) {
+            if (!isNull(first) && !isNull(last)) {
+                long currTimeStamp = System.currentTimeMillis();
+                CacheItem<K, V> item = first;
+                while (!isNull(item)) {
+                    if (currTimeStamp - item.getLastHitTimestamp().toInstant().toEpochMilli() > ttl) {
+                        removeItem(item);
+                    }
+                    item = item.getNext();
+                }
+            }
+        }
     }
 }
