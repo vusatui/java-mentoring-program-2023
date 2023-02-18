@@ -10,6 +10,8 @@ import java.util.function.Consumer;
 
 public class CacheImpl<K, V> implements Cache <K, V> {
 
+    private static final String REMOVE_MESSAGE_TEMPLATE = "\"%s\" was removed";
+
     private final int maxSize;
 
     private final Map<K, CacheItem<K, V>> map = new HashMap<>();
@@ -22,6 +24,10 @@ public class CacheImpl<K, V> implements Cache <K, V> {
 
     public CacheImpl(int maxSize) {
         this.maxSize = maxSize;
+    }
+
+    private static void log(String message) {
+        System.out.println(message);
     }
 
     @Override
@@ -59,6 +65,7 @@ public class CacheImpl<K, V> implements Cache <K, V> {
 
     private void removeItem(CacheItem<K, V> item) {
         removeListeners.forEach(listener -> listener.accept(item.getValue()));
+        log(String.format(REMOVE_MESSAGE_TEMPLATE, item.getKey()));
 
         if (!isNull(item.getPrev())) {
             item.getPrev().setNext(item.getNext());
