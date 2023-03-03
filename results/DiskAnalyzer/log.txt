@@ -1,0 +1,8 @@
+There are no files with d letter in name.
+File searchforthefilenamewiththemaximumnumberofletters.java contains 0 occurrences of "a"
+File searchforthefilenamewiththemaximumnumberofletters.java contains 1 occurrences of "a"
+File searchforthefilenamewiththemaximumnumberofletters$myfilevisitor.class contains 1 occurrences of "a"
+File searchforthefilenamewiththemaximumnumberofletters$myfilevisitor.class contains 1 occurrences of "a"
+File searchforthefilenamewiththemaximumnumberofletters$myfilevisitor.class contains 1 occurrences of "a"
+File searchforthefilenamewiththemaximumnumberofletters$myfilevisitor.class contains 65 occurrences of "a"
+File searchforthefilenamewiththemaximumnumberofletters.java contains 5 occurrences of "a"
