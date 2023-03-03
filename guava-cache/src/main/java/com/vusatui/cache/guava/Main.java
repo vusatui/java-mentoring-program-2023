@@ -21,7 +21,7 @@ public class Main {
                         log(String.format("Evicted cause: %s",  n.getCause().name()));
                     }
                 })
-                .expireAfterWrite(Duration.ofSeconds(TWO_SECONDS))
+                .expireAfterAccess(Duration.ofSeconds(TWO_SECONDS))
                 .recordStats()
                 .build(new CacheLoader<>() {
                     @Override
@@ -37,6 +37,8 @@ public class Main {
         log(String.format("Unchecked value: %s", cache.getUnchecked("hello")));
 
         Thread.sleep(FIVE_SECONDS);
+
+        log(String.format("Value by key \"hello\": %s",  cache.get("hello")));
 
         log(String.format("Average load penalty: %s", cache.stats().totalLoadTime()));
         log(String.format("Evictions count: %s", cache.stats().evictionCount()));

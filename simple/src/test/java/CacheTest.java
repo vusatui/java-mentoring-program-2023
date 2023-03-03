@@ -1,17 +1,7 @@
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.vusatui.cache.simple.Cache;
@@ -21,8 +11,6 @@ import org.junit.platform.commons.annotation.Testable;
 
 @Testable
 class CacheTest {
-
-//    private static final int CACHE_LIMIT = 100_000;
 
     @Test
     void testLfuStrategy() {
@@ -66,7 +54,7 @@ class CacheTest {
         cache.put("key", "value");
         assertEquals("value", cache.get("key"));
 
-        wait(ttl + 1000);
+        Thread.sleep(ttl + 1000);
 
         assertNull(cache.get("key"));
     }
