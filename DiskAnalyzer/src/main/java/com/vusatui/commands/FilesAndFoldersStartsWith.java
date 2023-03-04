@@ -18,10 +18,11 @@ import com.github.rvesse.airline.annotations.Option;
 import com.github.rvesse.airline.annotations.restrictions.Required;
 
 @Command(
-        name = "afs",
-        description = "The average file size in the specified directory or any its subdirectory"
+        name = "ffsw",
+        description = "The number of files and folders, divided by the first letters of the alphabet " +
+                "(for example, 100,000 files and 200 folders begin with the letter A)"
 )
-public class AverageFileSize implements Runnable {
+public class FilesAndFoldersStartsWith implements Runnable {
 
     @Inject
     private HelpOption<SearchForTheFileNameWithTheMaximumNumberOfLetters> help;
@@ -30,6 +31,11 @@ public class AverageFileSize implements Runnable {
     @Option(name = { "-p", "--path" },
             description = "Path where to search")
     private String path;
+
+    @Required
+    @Option(name = { "-l", "--letter" },
+            description = "Start letter")
+    private String letter;
 
     @Required
     @Option(name = { "-o", "--output" },
@@ -53,8 +59,8 @@ public class AverageFileSize implements Runnable {
 
         MyFileVisitor myFileVisitor = new MyFileVisitor();
         Files.walkFileTree(Path.of(path), myFileVisitor);
-        long avr = myFileVisitor.getTop().stream().map(FileRecord::getSize).reduce(0L, Long::sum) / myFileVisitor.getTop().size();
-        writeResults(String.format("The average size of file in %s directory is %s", path, avr));
+        writeResults(String.format("Number of folders starts with %s - %s, number of files starts with %s - %s",
+                letter, myFileVisitor.getFoldersCount(), letter, myFileVisitor.getFilesCount()));
     }
 
     private void writeResults(String message) throws IOException {
@@ -65,15 +71,23 @@ public class AverageFileSize implements Runnable {
 
     private final class MyFileVisitor extends SimpleFileVisitor<Path> {
 
-        private final List<FileRecord> top = new LinkedList<>();
+        private long filesCount = 0l;
 
-        public List<FileRecord> getTop() {
-            return top;
+        private long foldersCount = 0l;
+
+        public long getFilesCount() {
+            return filesCount;
+        }
+
+        public long getFoldersCount() {
+            return foldersCount;
         }
 
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-            top.add(new FileRecord(file.getFileName().toString(), attrs.size()));
+            if (file.getFileName().toString().toLowerCase().startsWith(letter)) {
+                filesCount++;
+            }
             return FileVisitResult.CONTINUE;
         }
 
@@ -82,25 +96,12 @@ public class AverageFileSize implements Runnable {
             System.out.printf("Visit for $s failed with error: %s %n", file.toAbsolutePath(), exc.getMessage());
             return FileVisitResult.CONTINUE;
         }
-    }
 
-    private final class FileRecord {
-
-        private final String name;
-
-        private final long size;
-
-        private FileRecord(String name, long size) {
-            this.name = name;
-            this.size = size;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public long getSize() {
-            return size;
+        public FileVisitResult postVisitDirectory(Path dir) {
+            if (dir.getFileName().toString().toLowerCase().startsWith(letter)) {
+                foldersCount++;
+            }
+            return FileVisitResult.CONTINUE;
         }
     }
 }
