@@ -2,6 +2,7 @@ package com.vusatui;
 
 import com.github.rvesse.airline.Cli;
 import com.github.rvesse.airline.help.Help;
+import com.vusatui.commands.AverageFileSize;
 import com.vusatui.commands.SearchForTheFileNameWithTheMaximumNumberOfLetters;
 import com.vusatui.commands.TopFiveLargestFiles;
 
@@ -12,7 +13,8 @@ import com.vusatui.commands.TopFiveLargestFiles;
         commands = {
                 Help.class,
                 SearchForTheFileNameWithTheMaximumNumberOfLetters.class,
-                TopFiveLargestFiles.class
+                TopFiveLargestFiles.class,
+                AverageFileSize.class
         }
 )
 public class Main {
