@@ -1,0 +1,12 @@
+Top largest file under /Users/Anton_Vusatyi/IdeaProjects/JavaMentoringProgram2023/DiskAnalyzer directory: TopFiveLargestFiles.class - 5580 bytes
+SearchForTheFileNameWithTheMaximumNumberOfLetters.class - 4379 bytes
+SearchForTheFileNameWithTheMaximumNumberOfLetters$MyFileVisitor.class - 3717 bytes
+SearchForTheFileNameWithTheMaximumNumberOfLetters.java - 3679 bytes
+TopFiveLargestFiles.java - 3376 bytes
+Top largest file under /Users/Anton_Vusatyi/IdeaProjects/JavaMentoringProgram2023/DiskAnalyzer directory:
+ TopFiveLargestFiles.class - 5582 bytes
+SearchForTheFileNameWithTheMaximumNumberOfLetters.class - 4379 bytes
+SearchForTheFileNameWithTheMaximumNumberOfLetters$MyFileVisitor.class - 3717 bytes
+SearchForTheFileNameWithTheMaximumNumberOfLetters.java - 3679 bytes
+TopFiveLargestFiles.java - 3378 bytes
+The average size of file in /Users/Anton_Vusatyi/IdeaProjects/JavaMentoringProgram2023/DiskAnalyzer directory is 2768
