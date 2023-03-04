@@ -3,12 +3,17 @@ package com.vusatui;
 import com.github.rvesse.airline.Cli;
 import com.github.rvesse.airline.help.Help;
 import com.vusatui.commands.SearchForTheFileNameWithTheMaximumNumberOfLetters;
+import com.vusatui.commands.TopFiveLargestFiles;
 
 @com.github.rvesse.airline.annotations.Cli(
         name = "sda",
         description = "A simple disk analyzer",
         defaultCommand = Help.class,
-        commands = { SearchForTheFileNameWithTheMaximumNumberOfLetters.class, Help.class }
+        commands = {
+                Help.class,
+                SearchForTheFileNameWithTheMaximumNumberOfLetters.class,
+                TopFiveLargestFiles.class
+        }
 )
 public class Main {
 

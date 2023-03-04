@@ -1,2 +1,11 @@
-File searchforthefilenamewiththemaximumnumberofletters.java contains 5 occurrences of "a"
-File searchforthefilenamewiththemaximumnumberofletters.java contains 5 occurrences of "a"
+Top largest file under /Users/Anton_Vusatyi/IdeaProjects/JavaMentoringProgram2023/DiskAnalyzer directory: TopFiveLargestFiles.class - 5580 bytes
+SearchForTheFileNameWithTheMaximumNumberOfLetters.class - 4379 bytes
+SearchForTheFileNameWithTheMaximumNumberOfLetters$MyFileVisitor.class - 3717 bytes
+SearchForTheFileNameWithTheMaximumNumberOfLetters.java - 3679 bytes
+TopFiveLargestFiles.java - 3376 bytes
+Top largest file under /Users/Anton_Vusatyi/IdeaProjects/JavaMentoringProgram2023/DiskAnalyzer directory:
+ TopFiveLargestFiles.class - 5582 bytes
+SearchForTheFileNameWithTheMaximumNumberOfLetters.class - 4379 bytes
+SearchForTheFileNameWithTheMaximumNumberOfLetters$MyFileVisitor.class - 3717 bytes
+SearchForTheFileNameWithTheMaximumNumberOfLetters.java - 3679 bytes
+TopFiveLargestFiles.java - 3378 bytes
