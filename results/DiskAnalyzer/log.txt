@@ -1,13 +1,10 @@
-Top largest file under /Users/Anton_Vusatyi/IdeaProjects/JavaMentoringProgram2023/DiskAnalyzer directory: TopFiveLargestFiles.class - 5580 bytes
-SearchForTheFileNameWithTheMaximumNumberOfLetters.class - 4379 bytes
-SearchForTheFileNameWithTheMaximumNumberOfLetters$MyFileVisitor.class - 3717 bytes
-SearchForTheFileNameWithTheMaximumNumberOfLetters.java - 3679 bytes
-TopFiveLargestFiles.java - 3376 bytes
+
+The average size of file in /Users/Anton_Vusatyi/IdeaProjects/JavaMentoringProgram2023/DiskAnalyzer directory is 2889
+Number of folders starts with a - 0, number of files starts with a - 4
+File searchforthefilenamewiththemaximumnumberofletters.java contains 5 occurrences of "a"
 Top largest file under /Users/Anton_Vusatyi/IdeaProjects/JavaMentoringProgram2023/DiskAnalyzer directory:
  TopFiveLargestFiles.class - 5582 bytes
-SearchForTheFileNameWithTheMaximumNumberOfLetters.class - 4379 bytes
-SearchForTheFileNameWithTheMaximumNumberOfLetters$MyFileVisitor.class - 3717 bytes
-SearchForTheFileNameWithTheMaximumNumberOfLetters.java - 3679 bytes
-TopFiveLargestFiles.java - 3378 bytes
-The average size of file in /Users/Anton_Vusatyi/IdeaProjects/JavaMentoringProgram2023/DiskAnalyzer directory is 2768
-Number of folders starts with a - 0, number of files starts with a - 4
+AverageFileSize.class - 4913 bytes
+SearchForTheFileNameWithTheMaximumNumberOfLetters.class - 4382 bytes
+FilesAndFoldersStartsWith.class - 4060 bytes
+SearchForTheFileNameWithTheMaximumNumberOfLetters$MyFileVisitor.class - 3718 bytes

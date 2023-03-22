@@ -12,7 +12,6 @@ public class UserDTO implements Serializable {
 
     private String surname;
 
-
     public String getName() {
         return name;
     }
