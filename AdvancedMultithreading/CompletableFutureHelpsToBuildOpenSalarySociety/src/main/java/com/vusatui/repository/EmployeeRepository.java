@@ -29,6 +29,11 @@ public class EmployeeRepository {
         return CompletableFuture.supplyAsync(() -> {
             System.out.printf("getSalary %s - ", hiredEmployeeId);
             System.out.println(Thread.currentThread().getId());
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             return BigDecimal.valueOf(faker.number().numberBetween(100_000, 200_000));
         });
     }
