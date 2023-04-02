@@ -12,11 +12,10 @@ public class EmployeeController {
     private static final EmployeeRepository employeeRepository = new EmployeeRepository();
 
     public CompletableFuture<Collection<EmployeeDTO>> getHiredEmployees() {
-        return CompletableFuture.supplyAsync(() -> employeeRepository.hiredEmployees()
-                .thenCompose(employeeDTOS -> {
-                    final List<CompletableFuture<Void>> completableFutures = employeeDTOS.stream().map(
+        return CompletableFuture.supplyAsync(() -> employeeRepository.hiredEmployees().thenCompose(employeeDTOS -> {
+                    final List<CompletableFuture<EmployeeDTO>> completableFutures = employeeDTOS.stream().map(
                             employeeDTO -> employeeRepository.getSalary(employeeDTO.getId())
-                                    .thenAccept(salary -> {
+                                    .thenApply(salary -> {
                                         System.out.println(employeeDTO.getId());
                                         System.out.println(Thread.currentThread().getId());
                                         try {
@@ -25,6 +24,7 @@ public class EmployeeController {
                                             throw new RuntimeException(e);
                                         }
                                         employeeDTO.setSalary(salary);
+                                        return employeeDTO;
                                     })
                     ).toList();
                     final CompletableFuture<Void> futures = CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture[0]));

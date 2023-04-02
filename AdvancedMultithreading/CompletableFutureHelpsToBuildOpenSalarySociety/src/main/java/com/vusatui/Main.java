@@ -1,13 +1,12 @@
 package com.vusatui;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 import com.vusatui.controller.EmployeeController;
 
 public class Main {
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) {
         EmployeeController employeeController = new EmployeeController();
         final CompletableFuture<Void> voidCompletableFuture = employeeController.getHiredEmployees()
                 .thenAccept(employeeDTOS -> employeeDTOS.forEach(employeeDTO -> {
@@ -16,6 +15,6 @@ public class Main {
                             employeeDTO.getSurname(), employeeDTO.getSalary());
                 }));
         System.out.println("Non blocked");
-        voidCompletableFuture.get();
+        voidCompletableFuture.join();
     }
 }

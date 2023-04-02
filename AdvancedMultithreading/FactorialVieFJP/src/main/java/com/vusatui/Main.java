@@ -5,7 +5,7 @@ import java.util.concurrent.ForkJoinPool;
 
 public class Main {
 
-    private static final int VALUE = 1200;
+    private static final int VALUE = 10000;
 
     public static void main(String[] args) {
         long start = System.nanoTime();
