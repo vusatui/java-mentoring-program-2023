@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+        "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+
+    <bean id="eventDAO" class="com.vusatui.ticket.booking.dao.EventDAO" />
+
+    <bean id="ticketDAO" class="com.vusatui.ticket.booking.dao.TicketDAO" />
+
+    <bean id="userDAO" class="com.vusatui.ticket.booking.dao.UserDAO" />
+
+    <bean id="eventService" class="com.vusatui.ticket.booking.service.EventService">
+        <property name="eventDAO" ref="eventDAO" />
+    </bean>
+
+    <bean id="userService" class="com.vusatui.ticket.booking.service.UserService">
+        <property name="userDAO" ref="userDAO" />
+    </bean>
+
+    <bean id="ticketService" class="com.vusatui.ticket.booking.service.TicketService">
+        <property name="ticketDAO" ref="ticketDAO" />
+    </bean>
+
+    <bean class="com.vusatui.ticket.booking.facade.BookingFacadeImpl">
+        <constructor-arg ref="userService"/>
+        <constructor-arg ref="ticketService"/>
+        <constructor-arg ref="eventService"/>
+    </bean>
+
+</beans>
